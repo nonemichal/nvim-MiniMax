@@ -43,14 +43,14 @@
 -- - `:SomeCommand ...` or `:lua ...` means execute mentioned command.
 
 -- Bootstrap 'mini.nvim' manually in a way that it gets managed by 'mini.deps'
-local mini_path = vim.fn.stdpath('data') .. '/site/pack/deps/start/mini.nvim'
+local mini_path = vim.fn.stdpath 'data' .. '/site/pack/deps/start/mini.nvim'
 if not vim.loop.fs_stat(mini_path) then
-  vim.cmd('echo "Installing `mini.nvim`" | redraw')
+  vim.cmd 'echo "Installing `mini.nvim`" | redraw'
   local origin = 'https://github.com/nvim-mini/mini.nvim'
   local clone_cmd = { 'git', 'clone', '--filter=blob:none', origin, mini_path }
   vim.fn.system(clone_cmd)
-  vim.cmd('packadd mini.nvim | helptags ALL')
-  vim.cmd('echo "Installed `mini.nvim`" | redraw')
+  vim.cmd 'packadd mini.nvim | helptags ALL'
+  vim.cmd 'echo "Installed `mini.nvim`" | redraw'
 end
 
 -- Plugin manager. Set up immediately for `now()`/`later()` helpers.
