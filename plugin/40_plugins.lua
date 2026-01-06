@@ -316,11 +316,11 @@ now_if_args(function()
     require('dap').step_out()
   end, { desc = 'Debug: Step Out' })
 
-  vim.keymap.set('n', '<leader>b', function()
+  vim.keymap.set('n', '<leader>db', function()
     require('dap').toggle_breakpoint()
   end, { desc = 'Debug: Toggle Breakpoint' })
 
-  vim.keymap.set('n', '<leader>B', function()
+  vim.keymap.set('n', '<leader>dB', function()
     require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
   end, { desc = 'Debug: Set Breakpoint' })
 
