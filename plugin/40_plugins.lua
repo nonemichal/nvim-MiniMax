@@ -206,8 +206,6 @@ now_if_args(function()
   add 'mason-org/mason.nvim'
   add 'mason-org/mason-lspconfig.nvim'
   add 'WhoIsSethDaniel/mason-tool-installer.nvim'
-  -- add('j-hui/fidget.nvim')
-  -- add('saghen/blink.cmp')
   require('mason').setup()
 
   local ensure_installed = require 'ensure-installed'
@@ -274,10 +272,6 @@ now_if_args(function()
 end)
 
 now_if_args(function()
-  add { source = 'max397574/better-escape.nvim' }
-end)
-
-now_if_args(function()
   add { source = 'RaafatTurki/hex.nvim' }
 end)
 
@@ -291,6 +285,52 @@ end)
 
 now_if_args(function()
   add {
+    source = 'esmuellert/codediff.nvim',
+    depends = { 'MunifTanjim/nui.nvim' },
+  }
+
+  require 'codediff'
+end)
+
+now_if_args(function()
+  add { source = 'max397574/better-escape.nvim' }
+  require('better_escape').setup {
+    timeout = vim.o.timeoutlen,
+    default_mappings = true,
+    mappings = {
+      i = {
+        j = {
+          k = '<Esc>',
+          j = '<Esc>',
+        },
+      },
+      c = {
+        j = {
+          k = '<C-c>',
+          j = '<C-c>',
+        },
+      },
+      t = {
+        j = {
+          k = '<C-\\><C-n>',
+        },
+      },
+      v = {
+        j = {
+          k = '<Esc>',
+        },
+      },
+      s = {
+        j = {
+          k = '<Esc>',
+        },
+      },
+    },
+  }
+end)
+
+now_if_args(function()
+  add {
     source = 'mfussenegger/nvim-dap',
     depends = {
       'rcarriga/nvim-dap-ui',
@@ -300,36 +340,34 @@ now_if_args(function()
     },
   }
 
-  vim.keymap.set('n', '<F5>', function()
-    require('dap').continue()
-  end, { desc = 'Debug: Start/Continue' })
-
-  vim.keymap.set('n', '<F1>', function()
-    require('dap').step_into()
-  end, { desc = 'Debug: Step Into' })
-
-  vim.keymap.set('n', '<F2>', function()
-    require('dap').step_over()
-  end, { desc = 'Debug: Step Over' })
-
-  vim.keymap.set('n', '<F3>', function()
-    require('dap').step_out()
-  end, { desc = 'Debug: Step Out' })
-
-  vim.keymap.set('n', '<leader>db', function()
-    require('dap').toggle_breakpoint()
-  end, { desc = 'Debug: Toggle Breakpoint' })
-
-  vim.keymap.set('n', '<leader>dB', function()
-    require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-  end, { desc = 'Debug: Set Breakpoint' })
-
-  vim.keymap.set('n', '<F7>', function()
-    require('dapui').toggle()
-  end, { desc = 'Debug: See last session result.' })
-
   local dap = require 'dap'
   local dapui = require 'dapui'
+
+  -- Helper function to map both <Fx> and <leader>d<Fx>
+  local function map_dap(key, fn, desc)
+    vim.keymap.set('n', key, fn, { desc = desc })
+    vim.keymap.set('n', '<leader>d' .. key, fn, { desc = desc })
+  end
+
+  -- Debug control mappings (function keys + leader variants)
+  map_dap('<F5>', dap.continue, 'Debug: Start/Continue')
+  map_dap('<F1>', dap.step_into, 'Debug: Step Into')
+  map_dap('<F2>', dap.step_over, 'Debug: Step Over')
+  map_dap('<F3>', dap.step_out, 'Debug: Step Out')
+
+  -- Debug UI toggle
+  map_dap('<F7>', dapui.toggle, 'Debug: Toggle UI')
+
+  -- Breakpoint mappings (leader only)
+  vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, {
+    desc = 'Debug: Set Breakpoint',
+  })
+
+  vim.keymap.set('n', '<leader>dB', function()
+    dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+  end, {
+    desc = 'Debug: Set Conditional Breakpoint',
+  })
 
   require('mason-nvim-dap').setup {
     automatic_installation = true,
@@ -343,18 +381,39 @@ now_if_args(function()
     },
     controls = {
       icons = {
-        pause = '⏸',
+        pause = '‖',
         play = '▶',
-        step_into = '⏎',
-        step_over = '⏭',
-        step_out = '⏮',
-        step_back = 'b',
+        step_into = '↳',
+        step_over = '↷',
+        step_out = '↪',
+        step_back = '←',
         run_last = '▶▶',
-        terminate = '⏹',
+        terminate = '■',
         disconnect = '⏏',
       },
     },
   }
+
+  -- Define DAP signs
+  vim.fn.sign_define('DapBreakpoint', {
+    text = '●',
+    texthl = 'Error',
+  })
+
+  vim.fn.sign_define('DapBreakpointCondition', {
+    text = '◆',
+    texthl = 'DiagnosticWarn',
+  })
+
+  vim.fn.sign_define('DapBreakpointRejected', {
+    text = '×',
+    texthl = 'WarningMsg',
+  })
+
+  vim.fn.sign_define('DapStopped', {
+    text = '→',
+    texthl = 'DiagnosticInfo',
+  })
 
   dap.listeners.after.event_initialized['dapui_config'] = dapui.open
   dap.listeners.before.event_terminated['dapui_config'] = dapui.close
@@ -370,16 +429,13 @@ now_if_args(function()
 
   -- Define linters for each filetype
   lint.linters_by_ft = {
-    asm = { 'asmfmt' },
-    bash = { 'shellcheck', 'shfmt' },
+    bash = { 'shellcheck' },
     bitbake = { 'oelint-adv' },
     c = { 'cpplint' },
-    cmake = { 'cmake_lint' },
+    cmake = { 'cmakelang' },
     cpp = { 'cpplint' },
     docker = { 'hadolint' },
-    fish = { 'fish' },
-    git = { 'gitlint' },
-    hadolint = { 'hadolint' },
+    git = { 'gitlint', 'gitleaks' },
     html = { 'htmlhint' },
     json = { 'jsonlint' },
     lua = { 'luacheck' },
@@ -388,7 +444,7 @@ now_if_args(function()
     python = { 'ruff' },
     systemd = { 'systemdlint' },
     webassembly = { 'wasm-language-tools' },
-    yaml = { 'yamllint', 'actionlint' },
+    yaml = { 'yamllint' },
   }
 
   -- Lint on save

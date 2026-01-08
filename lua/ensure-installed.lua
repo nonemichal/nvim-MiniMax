@@ -8,11 +8,11 @@ local servers = {
   ['basics-language-server'] = {},
   ['clangd'] = {},
   ['cmake-language-server'] = {},
-  ['docker-compose-language-service'] = {},
-  ['dockerfile-language-server'] = {},
+  ['docker-language-server'] = {},
   ['fish-lsp'] = {},
   ['gh-actions-language-server'] = {},
   ['glsl_analyzer'] = {},
+  ['hls'] = {},
   ['html-lsp'] = {},
   ['htmx-lsp'] = {},
   ['json-lsp'] = {},
@@ -24,7 +24,6 @@ local servers = {
   ['taplo'] = {},
   ['typescript-language-server'] = {},
   ['typos-lsp'] = {},
-  ['yamlls'] = {},
   ['wasm-language-tools'] = {},
   ['yaml-language-server'] = {},
 }
@@ -34,7 +33,6 @@ end
 
 local linters = {
   'actionlint',
-  'asmfmt',
   'checkmake',
   'cmakelang',
   'codespell',
@@ -42,6 +40,7 @@ local linters = {
   'gitleaks',
   'gitlint',
   'hadolint',
+  'hlint',
   'htmlhint',
   'jsonlint',
   'luacheck',
@@ -49,26 +48,27 @@ local linters = {
   'oelint-adv',
   'ruff',
   'shellcheck',
-  'shfmt',
-  'stylua',
   'systemdlint',
-  'yamlfmt',
   'yamllint',
-  'qmlls',
 }
 vim.list_extend(ensure_installed, linters)
 
 local formatters = {
+  asm = { 'asmfmt' },
   lua = { 'stylua' },
   python = { 'ruff' },
   cmake = { 'cmakelang' },
   markdown = { 'markdownlint' },
-  sh = { 'shfmt' },
+  sh = { 'beautysh' },
   wasm = { 'wasm-language-tools' },
   yaml = { 'yamlfmt' },
   toml = { 'taplo' },
   html = { 'htmlbeautifier' },
   glsl = { 'glsl_analyzer' },
+  json = {'fixjson'},
+  -- c = {'clangd'},
+  -- cpp = {'clangd'},
+  haskell = {'ormolu'},
 }
 for _, tools in pairs(formatters) do
   vim.list_extend(ensure_installed, tools)
@@ -81,6 +81,7 @@ local daps = {
   ['debugpy'] = {},
   ['js-debug-adapter'] = {},
   ['local-lua-debugger-vscode'] = {},
+  -- ['haskell-debug-adapter'] = {},
 }
 for name, _ in pairs(daps) do
   table.insert(ensure_installed, name)

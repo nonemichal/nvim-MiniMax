@@ -51,11 +51,10 @@ nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
 -- Add an entry if you create a new group.
 _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
-  { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
+  { mode = 'n', keys = '<Leader>e', desc = '+Explore' },
   { mode = 'n', keys = '<Leader>f', desc = '+Find' },
   { mode = 'n', keys = '<Leader>g', desc = '+Git' },
   { mode = 'n', keys = '<Leader>l', desc = '+Language' },
-  { mode = 'n', keys = '<Leader>m', desc = '+Map' },
   { mode = 'n', keys = '<Leader>o', desc = '+Other' },
   { mode = 'n', keys = '<Leader>s', desc = '+Session' },
   { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
@@ -109,14 +108,14 @@ local explore_quickfix = function()
   vim.cmd('copen')
 end
 
-nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>', 'Directory')
-nmap_leader('ef', explore_at_file, 'File directory')
-nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>', 'init.lua')
-nmap_leader('ek', edit_plugin_file('20_keymaps.lua'), 'Keymaps config')
-nmap_leader('em', edit_plugin_file('30_mini.lua'), 'MINI config')
+-- nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>', 'Directory')
+-- nmap_leader('ef', explore_at_file, 'File directory')
+-- nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>', 'init.lua')
+-- nmap_leader('ek', edit_plugin_file('20_keymaps.lua'), 'Keymaps config')
+-- nmap_leader('em', edit_plugin_file('30_mini.lua'), 'MINI config')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
-nmap_leader('eo', edit_plugin_file('10_options.lua'), 'Options config')
-nmap_leader('ep', edit_plugin_file('40_plugins.lua'), 'Plugins config')
+-- nmap_leader('eo', edit_plugin_file('10_options.lua'), 'Options config')
+-- nmap_leader('ep', edit_plugin_file('40_plugins.lua'), 'Plugins config')
 nmap_leader('eq', explore_quickfix, 'Quickfix')
 
 -- f is for 'Fuzzy Find'. Common usage:
@@ -202,10 +201,10 @@ xmap_leader('lf', formatting_cmd, 'Format selection')
 -- - `<Leader>mt` - toggle map from 'mini.map' (closed by default)
 -- - `<Leader>mf` - focus on the map for fast navigation
 -- - `<Leader>ms` - change map's side (if it covers something underneath)
-nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
-nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>', 'Refresh')
-nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>', 'Side (toggle)')
-nmap_leader('mt', '<Cmd>lua MiniMap.toggle()<CR>', 'Toggle')
+-- nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
+-- nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>', 'Refresh')
+-- nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>', 'Side (toggle)')
+-- nmap_leader('mt', '<Cmd>lua MiniMap.toggle()<CR>', 'Toggle')
 
 -- o is for 'Other'. Common usage:
 -- - `<Leader>oz` - toggle between "zoomed" and regular view of current buffer
