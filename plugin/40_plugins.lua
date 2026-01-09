@@ -343,26 +343,41 @@ now_if_args(function()
   local dap = require 'dap'
   local dapui = require 'dapui'
 
+  -- Track DAP UI state manually
+  local dapui_open = false
+
+  -- Wrapper for toggling DAP UI and adjusting signcolumn
+  local function toggle_dapui_and_signcolumn()
+    if dapui_open then
+      dapui.close()
+      vim.wo.signcolumn = 'yes' -- revert to single column
+      dapui_open = false
+    else
+      dapui.open()
+      vim.wo.signcolumn = 'yes:2' -- use 2 columns when UI is open
+      dapui_open = true
+    end
+  end
+
   -- Helper function to map both <Fx> and <leader>d<Fx>
   local function map_dap(key, fn, desc)
     vim.keymap.set('n', key, fn, { desc = desc })
     vim.keymap.set('n', '<leader>d' .. key, fn, { desc = desc })
   end
 
-  -- Debug control mappings (function keys + leader variants)
+  -- Debug control(function keys + leader variants)
   map_dap('<F5>', dap.continue, 'Debug: Start/Continue')
   map_dap('<F1>', dap.step_into, 'Debug: Step Into')
   map_dap('<F2>', dap.step_over, 'Debug: Step Over')
   map_dap('<F3>', dap.step_out, 'Debug: Step Out')
 
   -- Debug UI toggle
-  map_dap('<F7>', dapui.toggle, 'Debug: Toggle UI')
+  map_dap('<F7>', toggle_dapui_and_signcolumn, 'Debug: Toggle UI')
 
   -- Breakpoint mappings (leader only)
   vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, {
     desc = 'Debug: Set Breakpoint',
   })
-
   vim.keymap.set('n', '<leader>dB', function()
     dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
   end, {
@@ -399,25 +414,29 @@ now_if_args(function()
     text = '●',
     texthl = 'Error',
   })
-
   vim.fn.sign_define('DapBreakpointCondition', {
     text = '◆',
     texthl = 'DiagnosticWarn',
   })
-
   vim.fn.sign_define('DapBreakpointRejected', {
     text = '×',
     texthl = 'WarningMsg',
   })
-
   vim.fn.sign_define('DapStopped', {
     text = '→',
     texthl = 'DiagnosticInfo',
   })
 
-  dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-  dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-  dap.listeners.before.event_exited['dapui_config'] = dapui.close
+  -- Open and close DAP UI automatically
+  dap.listeners.after.event_initialized['dapui_config'] = function()
+    dapui.open()
+  end
+  dap.listeners.before.event_terminated['dapui_config'] = function()
+    dapui.close()
+  end
+  dap.listeners.before.event_exited['dapui_config'] = function()
+    dapui.close()
+  end
 end)
 
 now_if_args(function()
@@ -447,8 +466,8 @@ now_if_args(function()
     yaml = { 'yamllint' },
   }
 
-  -- Lint on save
-  vim.api.nvim_create_autocmd('BufWritePost', {
+  -- Lint on save, on file open and when entering a buffer
+  vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufReadPost' }, {
     callback = function()
       -- Run linters defined for the current filetype
       lint.try_lint()
