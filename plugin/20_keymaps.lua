@@ -60,7 +60,9 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
   { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
   { mode = 'n', keys = '<Leader>d', desc = '+Debug' },
+  { mode = 'n', keys = '<Leader>r', desc = '+Replace' },
 
+  { mode = 'x', keys = '<Leader>r', desc = '+Replace' },
   { mode = 'x', keys = '<Leader>g', desc = '+Git' },
   { mode = 'x', keys = '<Leader>l', desc = '+Language' },
 }

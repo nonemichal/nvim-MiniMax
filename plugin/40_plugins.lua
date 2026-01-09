@@ -284,6 +284,58 @@ now_if_args(function()
 end)
 
 now_if_args(function()
+  add { source = 'MagicDuck/grug-far.nvim' }
+
+  local grug_far = require 'grug-far'
+
+  vim.keymap.set('n', '<Leader>rr', ':GrugFar<CR>', {
+    desc = 'Search/Replace',
+  })
+
+  vim.keymap.set('n', '<Leader>rf', function()
+    grug_far.open {
+      prefills = { paths = vim.fn.expand '%' },
+    }
+  end, {
+    desc = 'Search/Replace in buffer',
+  })
+
+  vim.keymap.set({ 'n', 'x' }, '<Leader>ri', function()
+    grug_far.open {
+      visualSelectionUsage = 'operate-within-range',
+    }
+  end, {
+    desc = 'Search/Replace in range',
+  })
+
+  -- Oil integration
+  vim.keymap.set('n', '<Leader>re', function()
+    local ok, oil = pcall(require, 'oil')
+    if not ok then
+      vim.notify('oil.nvim is not available', vim.log.levels.WARN)
+      return
+    end
+
+    local prefills = { paths = oil.get_current_dir() }
+
+    if not grug_far.has_instance 'explorer' then
+      grug_far.open {
+        instanceName = 'explorer',
+        prefills = prefills,
+        staticTitle = 'Search/Replace from Explorer',
+      }
+    else
+      local instance = grug_far.get_instance 'explorer'
+      instance:open()
+      -- update only paths, keep search/replace untouched
+      instance:update_input_values(prefills, false)
+    end
+  end, {
+    desc = 'Search/Replace in explorer directory',
+  })
+end)
+
+now_if_args(function()
   add {
     source = 'esmuellert/codediff.nvim',
     depends = { 'MunifTanjim/nui.nvim' },
@@ -366,22 +418,22 @@ now_if_args(function()
   end
 
   -- Debug control(function keys + leader variants)
-  map_dap('<F5>', dap.continue, 'Debug: Start/Continue')
-  map_dap('<F1>', dap.step_into, 'Debug: Step Into')
-  map_dap('<F2>', dap.step_over, 'Debug: Step Over')
-  map_dap('<F3>', dap.step_out, 'Debug: Step Out')
+  map_dap('<F5>', dap.continue, 'Start/Continue')
+  map_dap('<F1>', dap.step_into, 'Step Into')
+  map_dap('<F2>', dap.step_over, 'Step Over')
+  map_dap('<F3>', dap.step_out, 'Step Out')
 
   -- Debug UI toggle
-  map_dap('<F7>', toggle_dapui_and_signcolumn, 'Debug: Toggle UI')
+  map_dap('<F7>', toggle_dapui_and_signcolumn, 'Toggle UI')
 
   -- Breakpoint mappings (leader only)
   vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, {
-    desc = 'Debug: Set Breakpoint',
+    desc = 'Set Breakpoint',
   })
   vim.keymap.set('n', '<leader>dB', function()
     dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
   end, {
-    desc = 'Debug: Set Conditional Breakpoint',
+    desc = 'Set Conditional Breakpoint',
   })
 
   require('mason-nvim-dap').setup {
