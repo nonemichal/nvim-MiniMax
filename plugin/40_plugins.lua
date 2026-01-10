@@ -529,3 +529,34 @@ now_if_args(function()
     end,
   })
 end)
+
+now_if_args(function()
+  add { source = 'akinsho/toggleterm.nvim' }
+
+  require('toggleterm').setup {
+    size = 20,
+    open_mapping = nil,
+    close_on_exit = true,
+    float_opts = {
+      border = 'rounded',
+      width = math.floor(vim.o.columns * 0.8),
+      height = math.floor(vim.o.lines * 0.8),
+      winblend = 3,
+      zindex = 50,
+      row = math.floor(vim.o.lines * 0.1),
+      col = math.floor(vim.o.columns * 0.1),
+      title_pos = 'center',
+    },
+  }
+
+  local Terminal = require('toggleterm.terminal').Terminal
+  local float_term = Terminal:new { direction = 'float' }
+
+  vim.keymap.set('n', '<Leader>tf', function()
+    float_term:toggle()
+  end, { desc = 'Terminal (floating)' })
+
+  vim.keymap.set('t', '<Esc>', function()
+    float_term:toggle()
+  end, { desc = 'Hide floating terminal' })
+end)
