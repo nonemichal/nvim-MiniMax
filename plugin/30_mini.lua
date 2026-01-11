@@ -718,17 +718,16 @@ later(function()
       yank = {
         char = '<C-y>',
         func = function()
-          local state = MiniPick.get_picker_state()
-          local items = MiniPick.get_picker_items()
-
-          local item = items[state.caret]
-          if not item then
-            vim.notify('No item at caret ' .. tostring(state.caret), vim.log.levels.WARN)
+          local matches = MiniPick.get_picker_matches()
+          if not matches or not matches.current then
+            vim.notify('No current match in picker', vim.log.levels.WARN)
             return
           end
 
+          local item = matches.current
+
           if type(item) ~= 'table' or not item.message then
-            vim.notify('Item has no message field:\n' .. vim.inspect(item), vim.log.levels.ERROR)
+            vim.notify('Current item has no message field:\n' .. vim.inspect(item), vim.log.levels.ERROR)
             return
           end
 
