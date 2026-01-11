@@ -711,8 +711,32 @@ end)
 -- - `:h MiniPick.builtin` and `:h MiniExtra.pickers` - available pickers;
 --   Execute one either with Lua function, `:Pick <picker-name>` command, or
 --   one of `<Leader>f` mappings defined in 'plugin/20_keymaps.lua'
+
 later(function()
-  require('mini.pick').setup()
+  require('mini.pick').setup {
+    mappings = {
+      yank = {
+        char = '<C-y>',
+        func = function()
+          local state = MiniPick.get_picker_state()
+          local items = MiniPick.get_picker_items()
+
+          local item = items[state.caret]
+          if not item then
+            vim.notify('No item at caret ' .. tostring(state.caret), vim.log.levels.WARN)
+            return
+          end
+
+          if type(item) ~= 'table' or not item.message then
+            vim.notify('Item has no message field:\n' .. vim.inspect(item), vim.log.levels.ERROR)
+            return
+          end
+
+          vim.fn.setreg('+', item.message)
+        end,
+      },
+    },
+  }
 end)
 
 -- Manage and expand snippets (templates for a frequently used text).
