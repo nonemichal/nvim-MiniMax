@@ -7,7 +7,7 @@ local servers = {
   ['basedpyright'] = {},
   ['basics-language-server'] = {},
   ['clangd'] = {},
-  ['cmake-language-server'] = {},
+  ['neocmake'] = {},
   ['docker-language-server'] = {},
   ['fish-lsp'] = {},
   ['gh-actions-language-server'] = {},
@@ -34,7 +34,7 @@ end
 local linters = {
   'actionlint',
   'checkmake',
-  'cmakelang',
+  'cmakelint',
   'codespell',
   'cpplint',
   'gitleaks',
@@ -57,7 +57,7 @@ local formatters = {
   asm = { 'asmfmt' },
   lua = { 'stylua' },
   python = { 'ruff' },
-  cmake = { 'cmakelang' },
+  cmake = { 'gersemi' },
   markdown = { 'markdownlint' },
   sh = { 'beautysh' },
   wasm = { 'wasm-language-tools' },
@@ -65,10 +65,10 @@ local formatters = {
   toml = { 'taplo' },
   html = { 'htmlbeautifier' },
   glsl = { 'glsl_analyzer' },
-  json = {'fixjson'},
+  json = { 'fixjson' },
   -- c = {'clangd'},
   -- cpp = {'clangd'},
-  haskell = {'ormolu'},
+  haskell = { 'ormolu' },
 }
 for _, tools in pairs(formatters) do
   vim.list_extend(ensure_installed, tools)

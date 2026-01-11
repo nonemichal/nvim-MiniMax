@@ -168,6 +168,24 @@ end)
 later(function()
   add 'stevearc/conform.nvim'
 
+  local formatters = {
+    asm = { 'asmfmt' },
+    lua = { 'stylua' },
+    python = { 'ruff' },
+    cmake = { 'gersemi' },
+    markdown = { 'markdownlint' },
+    sh = { 'beautysh' },
+    wasm = { 'wasm-language-tools' },
+    yaml = { 'yamlfmt' },
+    toml = { 'taplo' },
+    html = { 'htmlbeautifier' },
+    glsl = { 'glsl_analyzer' },
+    json = { 'fixjson' },
+    -- c = { "clangd" },
+    -- cpp = { "clangd" },
+    haskell = { 'ormolu' },
+  }
+
   -- See also:
   -- - `:h Conform`
   -- - `:h conform-options`
@@ -176,6 +194,7 @@ later(function()
     -- Map of filetype to formatters
     -- Make sure that necessary CLI tool is available
     -- formatters_by_ft = { lua = { 'stylua' } },
+    formatters_by_ft = formatters,
   }
 end)
 
@@ -503,7 +522,7 @@ now_if_args(function()
     bash = { 'shellcheck' },
     bitbake = { 'oelint-adv' },
     c = { 'cpplint' },
-    cmake = { 'cmakelang' },
+    cmake = { 'cmakelint' },
     cpp = { 'cpplint' },
     docker = { 'hadolint' },
     git = { 'gitlint', 'gitleaks' },
@@ -559,4 +578,11 @@ now_if_args(function()
   vim.keymap.set('t', '<Esc>', function()
     float_term:toggle()
   end, { desc = 'Hide floating terminal' })
+
+  vim.keymap.set('n', '<Esc>', function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    if float_term.bufnr == bufnr then
+      float_term:toggle()
+    end
+  end, { desc = 'Hide floating terminal in normal mode' })
 end)
