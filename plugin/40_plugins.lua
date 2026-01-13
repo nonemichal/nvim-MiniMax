@@ -359,8 +359,20 @@ now_if_args(function()
     source = 'esmuellert/codediff.nvim',
     depends = { 'MunifTanjim/nui.nvim' },
   }
+end)
 
-  require 'codediff'
+now_if_args(function()
+  add {
+    source = 'https://codeberg.org/esensar/nvim-dev-container',
+    depends = { 'nvim-treesitter/nvim-treesitter' },
+  }
+end)
+
+now_if_args(function()
+  add {
+    source = 'esmuellert/codediff.nvim',
+    depends = { 'MunifTanjim/nui.nvim' },
+  }
 end)
 
 now_if_args(function()
