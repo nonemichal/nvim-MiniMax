@@ -311,7 +311,7 @@ now_if_args(function()
     desc = 'Search/Replace',
   })
 
-  vim.keymap.set('n', '<Leader>rf', function()
+  vim.keymap.set('n', '<Leader>rb', function()
     grug_far.open {
       prefills = { paths = vim.fn.expand '%' },
     }

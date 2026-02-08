@@ -247,4 +247,8 @@ nmap_leader('vv', '<Cmd>lua MiniVisits.add_label("core")<CR>', 'Add "core" label
 nmap_leader('vV', '<Cmd>lua MiniVisits.remove_label("core")<CR>', 'Remove "core" label')
 nmap_leader('vl', '<Cmd>lua MiniVisits.add_label()<CR>', 'Add label')
 nmap_leader('vL', '<Cmd>lua MiniVisits.remove_label()<CR>', 'Remove label')
+
+-- Paste from yank register 0
+vim.api.nvim_set_keymap('n', '<leader>p', '"0p', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<leader>p', '"0p', { noremap = true, silent = true })
 -- stylua: ignore end

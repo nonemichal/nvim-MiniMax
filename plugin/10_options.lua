@@ -18,6 +18,8 @@
 -- General ====================================================================
 vim.g.mapleader      = ' '            -- Use `<Space>` as <Leader> key
 
+vim.g.maplocalleader = ","            -- Set localleader to comma
+
 vim.o.mouse          = 'a'            -- Enable mouse
 vim.o.mousescroll    = 'ver:10,hor:6' -- Customize mouse scroll
 vim.o.switchbuf      = 'usetab'       -- Use already opened buffers when switching
