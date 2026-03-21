@@ -175,7 +175,7 @@ later(function()
     cmake = { 'gersemi' },
     markdown = { 'markdownlint' },
     sh = { 'beautysh' },
-    wasm = { 'wasm-language-tools' },
+    wasm = { 'wat_server' },
     yaml = { 'yamlfmt' },
     toml = { 'taplo' },
     html = { 'htmlbeautifier' },
@@ -291,7 +291,10 @@ now_if_args(function()
 end)
 
 now_if_args(function()
-  add { source = 'RaafatTurki/hex.nvim' }
+  add {
+    source = 'RaafatTurki/hex.nvim',
+  }
+  require('hex').setup()
 end)
 
 now_if_args(function()
@@ -300,6 +303,7 @@ end)
 
 now_if_args(function()
   add { source = 'sQVe/sort.nvim' }
+  require('sort').setup()
 end)
 
 now_if_args(function()
@@ -366,50 +370,12 @@ now_if_args(function()
     source = 'https://codeberg.org/esensar/nvim-dev-container',
     depends = { 'nvim-treesitter/nvim-treesitter' },
   }
-end)
-
-now_if_args(function()
-  add {
-    source = 'esmuellert/codediff.nvim',
-    depends = { 'MunifTanjim/nui.nvim' },
-  }
+  require('devcontainer').setup {}
 end)
 
 now_if_args(function()
   add { source = 'max397574/better-escape.nvim' }
-  require('better_escape').setup {
-    timeout = vim.o.timeoutlen,
-    default_mappings = true,
-    mappings = {
-      i = {
-        j = {
-          k = '<Esc>',
-          j = '<Esc>',
-        },
-      },
-      c = {
-        j = {
-          k = '<C-c>',
-          j = '<C-c>',
-        },
-      },
-      t = {
-        j = {
-          k = '<C-\\><C-n>',
-        },
-      },
-      v = {
-        j = {
-          k = '<Esc>',
-        },
-      },
-      s = {
-        j = {
-          k = '<Esc>',
-        },
-      },
-    },
-  }
+  require('better_escape').setup {}
 end)
 
 now_if_args(function()
@@ -524,6 +490,13 @@ end)
 
 now_if_args(function()
   add {
+    source = 'igorlfs/nvim-dap-view',
+    depends = { 'mfussenegger/nvim-dap' },
+  }
+end)
+
+now_if_args(function()
+  add {
     source = 'mfussenegger/nvim-lint',
   }
 
@@ -597,4 +570,18 @@ now_if_args(function()
       float_term:toggle()
     end
   end, { desc = 'Hide floating terminal in normal mode' })
+end)
+
+now_if_args(function()
+  add {
+    source = 'nemanjamalesija/smart-paste.nvim',
+  }
+  require('smart-paste').setup()
+end)
+
+now_if_args(function()
+  add {
+    source = 'johmsalas/text-case.nvim',
+  }
+  require('textcase').setup()
 end)
