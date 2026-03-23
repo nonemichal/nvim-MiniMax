@@ -168,33 +168,41 @@ end)
 later(function()
   add 'stevearc/conform.nvim'
 
-  local formatters = {
-    asm = { 'asmfmt' },
-    lua = { 'stylua' },
-    python = { 'ruff' },
-    cmake = { 'gersemi' },
-    markdown = { 'markdownlint' },
-    sh = { 'beautysh' },
-    wasm = { 'wat_server' },
-    yaml = { 'yamlfmt' },
-    toml = { 'taplo' },
-    html = { 'htmlbeautifier' },
-    glsl = { 'glsl_analyzer' },
-    json = { 'fixjson' },
-    -- c = { "clangd" },
-    -- cpp = { "clangd" },
-    haskell = { 'ormolu' },
-  }
+  local conform = require 'conform'
 
-  -- See also:
-  -- - `:h Conform`
-  -- - `:h conform-options`
-  -- - `:h conform-formatters`
-  require('conform').setup {
-    -- Map of filetype to formatters
-    -- Make sure that necessary CLI tool is available
-    -- formatters_by_ft = { lua = { 'stylua' } },
-    formatters_by_ft = formatters,
+  conform.setup {
+    formatters = {
+      glsl_analyzer = {
+        command = 'glsl_analyzer',
+        args = { '--format', '$FILENAME' },
+        stdin = false,
+      },
+      wat_server = {
+        command = 'wat_server',
+        args = { '--format', '$FILENAME' },
+        stdin = false,
+      },
+    },
+
+    formatters_by_ft = {
+      asm = { 'asmfmt' },
+      lua = { 'stylua' },
+      python = { 'ruff_format', 'ruff_fix', 'ruff_organize_imports' },
+      cmake = { 'gersemi' },
+      markdown = { 'markdownlint' },
+      sh = { 'beautysh' },
+      yaml = { 'yamlfmt' },
+      toml = { 'taplo' },
+      html = { 'htmlbeautifier' },
+      json = { 'fixjson' },
+      haskell = { 'ormolu' },
+
+      -- added:
+      -- glsl = { 'glsl_analyzer' },
+      -- wat = { 'wat_server' },
+      -- c = { 'clangd' },
+      -- cpp = { 'clangd' },
+    },
   }
 end)
 
