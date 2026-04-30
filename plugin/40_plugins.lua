@@ -315,58 +315,6 @@ now_if_args(function()
 end)
 
 now_if_args(function()
-  add { source = 'MagicDuck/grug-far.nvim' }
-
-  local grug_far = require 'grug-far'
-
-  vim.keymap.set('n', '<Leader>rr', ':GrugFar<CR>', {
-    desc = 'Search/Replace',
-  })
-
-  vim.keymap.set('n', '<Leader>rb', function()
-    grug_far.open {
-      prefills = { paths = vim.fn.expand '%' },
-    }
-  end, {
-    desc = 'Search/Replace in buffer',
-  })
-
-  vim.keymap.set({ 'n', 'x' }, '<Leader>ri', function()
-    grug_far.open {
-      visualSelectionUsage = 'operate-within-range',
-    }
-  end, {
-    desc = 'Search/Replace in range',
-  })
-
-  -- Oil integration
-  vim.keymap.set('n', '<Leader>re', function()
-    local ok, oil = pcall(require, 'oil')
-    if not ok then
-      vim.notify('oil.nvim is not available', vim.log.levels.WARN)
-      return
-    end
-
-    local prefills = { paths = oil.get_current_dir() }
-
-    if not grug_far.has_instance 'explorer' then
-      grug_far.open {
-        instanceName = 'explorer',
-        prefills = prefills,
-        staticTitle = 'Search/Replace from Explorer',
-      }
-    else
-      local instance = grug_far.get_instance 'explorer'
-      instance:open()
-      -- update only paths, keep search/replace untouched
-      instance:update_input_values(prefills, false)
-    end
-  end, {
-    desc = 'Search/Replace in explorer directory',
-  })
-end)
-
-now_if_args(function()
   add {
     source = 'esmuellert/codediff.nvim',
     depends = { 'MunifTanjim/nui.nvim' },
