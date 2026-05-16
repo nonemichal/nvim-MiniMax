@@ -131,18 +131,4 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Based Pyright notification bug fix
-local orig = vim.lsp.handlers["$/progress"]
-
-vim.lsp.handlers["$/progress"] = function(err, result, ctx, config)
-  if result and result.value and result.value.kind == "report" then
-    local title = result.value.title
-    if title and title:lower():find("basedpyright") then
-      return
-    end
-  end
-
-  return orig(err, result, ctx, config)
-end
-
 -- stylua: ignore end
