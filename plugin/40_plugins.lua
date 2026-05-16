@@ -339,6 +339,7 @@ now_if_args(function()
     source = 'mfussenegger/nvim-dap',
     depends = {
       'rcarriga/nvim-dap-ui',
+      'theHamsta/nvim-dap-virtual-text',
       'nvim-neotest/nvim-nio',
       'mason-org/mason.nvim',
       'jay-babu/mason-nvim-dap.nvim',
@@ -347,6 +348,9 @@ now_if_args(function()
 
   local dap = require 'dap'
   local dapui = require 'dapui'
+  local daptext = require 'nvim-dap-virtual-text'
+
+  daptext.setup()
 
   -- Track DAP UI state manually
   local dapui_open = false
@@ -442,13 +446,6 @@ now_if_args(function()
   dap.listeners.before.event_exited['dapui_config'] = function()
     dapui.close()
   end
-end)
-
-now_if_args(function()
-  add {
-    source = 'igorlfs/nvim-dap-view',
-    depends = { 'mfussenegger/nvim-dap' },
-  }
 end)
 
 now_if_args(function()
