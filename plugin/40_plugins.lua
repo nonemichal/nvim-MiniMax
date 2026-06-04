@@ -148,33 +148,16 @@ end)
 -- inside 'neovim/nvim-lspconfig' plugin.
 --
 -- Add it now if file (and not 'mini.starter') is shown after startup.
--- now_if_args(function()
--- 	add({ "https://github.com/neovim/nvim-lspconfig" })
---
--- 	-- Use `:h vim.lsp.enable()` to automatically enable language server based on
--- 	-- the rules provided by 'nvim-lspconfig'.
--- 	-- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
--- 	-- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
--- 	-- vim.lsp.enable({
--- 	--   -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
--- 	-- })
--- end)
-
 now_if_args(function()
-	add({
-		"https://github.com/mason-org/mason.nvim",
-		"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
-		"https://github.com/neovim/nvim-lspconfig",
-	})
+	add({ "https://github.com/neovim/nvim-lspconfig" })
 
-	require("mason").setup()
-
-	local ensure_installed = require("ensure-installed")
-
-	require("mason-tool-installer").setup({
-		ensure_installed = ensure_installed,
-		run_on_start = true,
-	})
+	-- Use `:h vim.lsp.enable()` to automatically enable language server based on
+	-- the rules provided by 'nvim-lspconfig'.
+	-- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
+	-- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
+	-- vim.lsp.enable({
+	--   -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
+	-- })
 end)
 
 -- Formatting =================================================================
@@ -220,8 +203,8 @@ later(function()
 			-- added:
 			-- glsl = { 'glsl_analyzer' },
 			-- wat = { 'wat_server' },
-			-- c = { 'clangd' },
-			-- cpp = { 'clangd' },
+			c = { "clang-format" },
+			cpp = { "clang-format" },
 		},
 	})
 end)
@@ -249,29 +232,43 @@ end)
 -- If you need them to work elsewhere, consider using other package managers.
 --
 -- You can use it like so:
--- now_if_args(function()
--- 	add({
--- 		"https://github.com/mason-org/mason.nvim",
--- 		"https://github.com/mason-org/mason-lspconfig.nvim",
--- 		"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
--- 	})
--- 	require("mason").setup()
---
--- 	local ensure_installed = require("ensure-installed")
--- 	require("mason-tool-installer").setup({ ensure_installed = ensure_installed, run_on_start = true })
---
--- 	require("mason-lspconfig").setup({
--- 		ensure_installed = {},
--- 		automatic_installation = false,
--- 		handlers = {
--- 			function(server_name)
--- 				local server = servers[server_name] or {}
--- 				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
--- 				require("lspconfig")[server_name].setup(server)
--- 			end,
--- 		},
--- 	})
--- end)
+now_if_args(function()
+	add({
+		"https://github.com/mason-org/mason.nvim",
+		"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
+	})
+	require("mason").setup()
+
+	local ensure_installed = require("ensure-installed")
+	require("mason-tool-installer").setup({ ensure_installed = ensure_installed, run_on_start = true })
+
+	vim.lsp.enable({
+		"arduino_language_server",
+		"asm_lsp",
+		"basedpyright",
+		"bashls",
+		"dockerls",
+		"fish_lsp",
+		"gh_actions_ls",
+		"glsl_analyzer",
+		"hls",
+		"html",
+		"htmx",
+		"jsonls",
+		"lua_ls",
+		"marksman",
+		"neocmake",
+		"rust_analyzer",
+		"systemd_ls",
+		"taplo",
+		"tinymist",
+		"ts_ls",
+		"typos_lsp",
+		"wasm_language_tools",
+		"yamlls",
+		"clangd",
+	})
+end)
 
 -- Beautiful, usable, well maintained color schemes outside of 'mini.nvim' and
 -- have full support of its highlight groups. Use if you don't like 'miniwinter'

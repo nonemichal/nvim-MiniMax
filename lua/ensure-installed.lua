@@ -55,8 +55,8 @@ local linters = {
 vim.list_extend(ensure_installed, linters)
 
 local formatters = {
-	-- c = {'clangd'},
-	-- cpp = {'clangd'},
+	c = { "clang-format" },
+	cpp = { "clang-format" },
 	asm = { "asmfmt" },
 	cmake = { "gersemi" },
 	glsl = { "glsl_analyzer" },
