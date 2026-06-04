@@ -245,7 +245,6 @@ now_if_args(function()
 	vim.lsp.enable({
 		"arduino_language_server",
 		"asm_lsp",
-		"basedpyright",
 		"bashls",
 		"dockerls",
 		"fish_lsp",
@@ -267,6 +266,8 @@ now_if_args(function()
 		"wasm_language_tools",
 		"yamlls",
 		"clangd",
+		"basedpyright",
+		"ruff",
 	})
 end)
 
@@ -347,50 +348,49 @@ end)
 now_if_args(function()
 	add({
 		"https://github.com/mfussenegger/nvim-dap",
-		"https://github.com/rcarriga/nvim-dap-ui",
-		"https://github.com/nvim-neotest/nvim-nio",
+		"https://github.com/igorlfs/nvim-dap-view",
 		"https://github.com/mason-org/mason.nvim",
 		"https://github.com/jay-babu/mason-nvim-dap.nvim",
+		"https://github.com/thehamsta/nvim-dap-virtual-text",
+		"https://codeberg.org/Jorenar/nvim-dap-disasm",
 	})
 
 	local dap = require("dap")
-	local dapui = require("dapui")
+	local dapview = require("dap-view")
 
-	-- Track DAP UI state manually
-	local dapui_open = false
+	local dapview_open = false
 
-	-- Wrapper for toggling DAP UI and adjusting signcolumn
-	local function toggle_dapui_and_signcolumn()
-		if dapui_open then
-			dapui.close()
-			vim.wo.signcolumn = "yes" -- revert to single column
-			dapui_open = false
+	local function toggle_dapview()
+		dapview.toggle()
+
+		dapview_open = not dapview_open
+
+		if dapview_open then
+			vim.wo.signcolumn = "yes:2"
 		else
-			dapui.open()
-			vim.wo.signcolumn = "yes:2" -- use 2 columns when UI is open
-			dapui_open = true
+			vim.wo.signcolumn = "yes"
 		end
 	end
 
-	-- Helper function to map both <Fx> and <leader>d<Fx>
 	local function map_dap(key, fn, desc)
 		vim.keymap.set("n", key, fn, { desc = desc })
 		vim.keymap.set("n", "<leader>d" .. key, fn, { desc = desc })
 	end
 
-	-- Debug control(function keys + leader variants)
+	-- Debug control
 	map_dap("<F5>", dap.continue, "Start/Continue")
 	map_dap("<F1>", dap.step_into, "Step Into")
 	map_dap("<F2>", dap.step_over, "Step Over")
 	map_dap("<F3>", dap.step_out, "Step Out")
 
-	-- Debug UI toggle
-	map_dap("<F7>", toggle_dapui_and_signcolumn, "Toggle UI")
+	-- UI
+	map_dap("<F7>", toggle_dapview, "Toggle DAP View")
 
-	-- Breakpoint mappings (leader only)
+	-- Breakpoints
 	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, {
 		desc = "Set Breakpoint",
 	})
+
 	vim.keymap.set("n", "<leader>dB", function()
 		dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
 	end, {
@@ -401,55 +401,30 @@ now_if_args(function()
 		automatic_installation = true,
 	})
 
-	dapui.setup({
-		icons = {
-			expanded = "▾",
-			collapsed = "▸",
-			current_frame = "*",
-		},
-		controls = {
-			icons = {
-				pause = "‖",
-				play = "▶",
-				step_into = "↳",
-				step_over = "↷",
-				step_out = "↪",
-				step_back = "←",
-				run_last = "▶▶",
-				terminate = "■",
-				disconnect = "⏏",
-			},
-		},
+	dapview.setup({
+		auto_toggle = true,
 	})
 
-	-- Define DAP signs
+	-- DAP signs
 	vim.fn.sign_define("DapBreakpoint", {
 		text = "●",
 		texthl = "Error",
 	})
+
 	vim.fn.sign_define("DapBreakpointCondition", {
 		text = "◆",
 		texthl = "DiagnosticWarn",
 	})
+
 	vim.fn.sign_define("DapBreakpointRejected", {
 		text = "×",
 		texthl = "WarningMsg",
 	})
+
 	vim.fn.sign_define("DapStopped", {
 		text = "→",
 		texthl = "DiagnosticInfo",
 	})
-
-	-- Open and close DAP UI automatically
-	dap.listeners.after.event_initialized["dapui_config"] = function()
-		dapui.open()
-	end
-	dap.listeners.before.event_terminated["dapui_config"] = function()
-		dapui.close()
-	end
-	dap.listeners.before.event_exited["dapui_config"] = function()
-		dapui.close()
-	end
 end)
 
 now_if_args(function()
@@ -497,4 +472,9 @@ end)
 now_if_args(function()
 	add({ "https://github.com/johmsalas/text-case.nvim" })
 	require("textcase").setup()
+end)
+
+now_if_args(function()
+	add({ "https://github.com/mfussenegger/nvim-dap-python" })
+	require("dap-python").setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
 end)
