@@ -218,9 +218,9 @@ end)
 -- snippet files. They are organized in 'snippets/' directory (mostly) per language.
 -- 'mini.snippets' is designed to work with it as seamlessly as possible.
 -- See `:h MiniSnippets.gen_loader.from_lang()`.
-later(function()
-	add({ "https://github.com/rafamadriz/friendly-snippets" })
-end)
+-- later(function()
+-- 	add({ "https://github.com/rafamadriz/friendly-snippets" })
+-- end)
 
 -- Honorable mentions =========================================================
 

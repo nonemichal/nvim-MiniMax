@@ -14,11 +14,6 @@ local nmap = function(lhs, rhs, desc)
 	vim.keymap.set("n", lhs, rhs, { desc = desc })
 end
 
--- Paste linewise before/after current line
--- Usage: `yiw` to yank a word and `]p` to put it on the next line.
-nmap("[p", '<Cmd>exe "put! " . v:register<CR>', "Paste Above")
-nmap("]p", '<Cmd>exe "put "  . v:register<CR>', "Paste Below")
-
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
 -- Leader mappings ============================================================
@@ -243,10 +238,6 @@ nmap_leader("vv", '<Cmd>lua MiniVisits.add_label("core")<CR>', 'Add "core" label
 nmap_leader("vV", '<Cmd>lua MiniVisits.remove_label("core")<CR>', 'Remove "core" label')
 nmap_leader("vl", "<Cmd>lua MiniVisits.add_label()<CR>", "Add label")
 nmap_leader("vL", "<Cmd>lua MiniVisits.remove_label()<CR>", "Remove label")
-
--- Paste from yank register 0
-vim.api.nvim_set_keymap("n", "<leader>p", '"0p', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("v", "<leader>p", '"0p', { noremap = true, silent = true })
 
 -- Floating terminal
 
