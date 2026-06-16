@@ -466,7 +466,9 @@ end)
 
 now_if_args(function()
 	add({ "https://github.com/nemanjamalesija/smart-paste.nvim" })
-	require("smart-paste").setup()
+	require("smart-paste").setup({
+		keys = { "p", "P", "]p", "[p" },
+	})
 end)
 
 now_if_args(function()

@@ -40,7 +40,7 @@ if vim.fn.exists("syntax_on") ~= 1 then
 end
 
 -- Sync clipboard between OS and Neovim
-vim.o.clipboard = "unnamedplus"
+-- vim.o.clipboard = "unnamedplus"
 
 -- UI =========================================================================
 vim.o.breakindent = true -- Indent wrapped lines to match line start

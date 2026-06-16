@@ -309,3 +309,5 @@ vim.keymap.set("n", "<Esc>", function()
 		state.win = nil
 	end
 end, { desc = "Hide floating terminal in normal mode" })
+
+vim.keymap.set("i", "jj", "<ESC>", { silent = true })
