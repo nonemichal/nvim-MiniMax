@@ -330,20 +330,20 @@ now_if_args(function()
 	require("sort").setup()
 end)
 
-now_if_args(function()
-	add({
-		"https://github.com/esmuellert/codediff.nvim",
-		"https://github.com/MunifTanjim/nui.nvim",
-	})
-end)
+-- now_if_args(function()
+-- 	add({
+-- 		"https://github.com/esmuellert/codediff.nvim",
+-- 		"https://github.com/MunifTanjim/nui.nvim",
+-- 	})
+-- end)
 
-now_if_args(function()
-	add({
-		"https://codeberg.org/esensar/nvim-dev-container",
-		"https://github.com/nvim-treesitter/nvim-treesitter",
-	})
-	require("devcontainer").setup({})
-end)
+-- now_if_args(function()
+-- 	add({
+-- 		"https://codeberg.org/esensar/nvim-dev-container",
+-- 		"https://github.com/nvim-treesitter/nvim-treesitter",
+-- 	})
+-- 	require("devcontainer").setup({})
+-- end)
 
 now_if_args(function()
 	add({
@@ -473,7 +473,9 @@ end)
 
 now_if_args(function()
 	add({ "https://github.com/johmsalas/text-case.nvim" })
-	require("textcase").setup()
+	require("textcase").setup({
+		prefix = "gC",
+	})
 end)
 
 now_if_args(function()
